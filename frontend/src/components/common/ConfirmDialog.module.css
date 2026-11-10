@@ -1,0 +1,43 @@
+.dialogBody {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.iconWrap {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warning {
+  background-color: var(--status-warning-soft);
+  color: var(--status-warning);
+}
+
+.danger {
+  background-color: var(--status-error-soft);
+  color: var(--status-error);
+}
+
+.info {
+  background-color: var(--accent-blue-soft);
+  color: var(--accent-blue);
+}
+
+.success {
+  background-color: var(--status-success-soft);
+  color: var(--status-success);
+}
+
+.messageText {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}

@@ -1,0 +1,103 @@
+.formGroup {
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.required {
+  color: var(--status-error);
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 2px rgba(244, 199, 106, 0.2);
+}
+
+.hasError {
+  border-color: var(--status-error) !important;
+}
+
+.hasError:focus-within {
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.2) !important;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input, .select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  padding: 10px 14px;
+  outline: none;
+  border-radius: var(--radius-md);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+.withLeftIcon {
+  padding-left: 38px;
+}
+
+.withRightElement {
+  padding-right: 42px;
+}
+
+.leftIcon {
+  position: absolute;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.rightElement {
+  position: absolute;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.errorText {
+  color: var(--status-error);
+  font-size: 0.78rem;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.helperText {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 4px;
+}
+
+.select option {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px;
+}

@@ -1,0 +1,60 @@
+:root {
+  /* VELoop Rewards Palette */
+  --bg-primary: #161827;
+  --bg-secondary: #1E2235;
+  --bg-card: #252A40;
+  --bg-card-hover: #303650;
+  --bg-input: #1B1E30;
+  --bg-modal-overlay: rgba(10, 12, 20, 0.75);
+
+  --accent-gold: #F4C76A;
+  --accent-gold-rgb: 244, 199, 106;
+  --accent-gold-soft: rgba(244, 199, 106, 0.15);
+
+  --accent-silver: #C7CEDB;
+  --accent-blue: #6EA8FE;
+  --accent-blue-soft: rgba(110, 168, 254, 0.15);
+
+  --accent-purple: #A78BFA;
+  --accent-purple-soft: rgba(167, 139, 250, 0.15);
+
+  --text-primary: #F8FAFC;
+  --text-secondary: #AAB4C8;
+  --text-muted: #7E8BA3;
+
+  --status-success: #34D399;
+  --status-success-soft: rgba(52, 211, 153, 0.15);
+
+  --status-warning: #FBBF24;
+  --status-warning-soft: rgba(251, 191, 36, 0.15);
+
+  --status-error: #F87171;
+  --status-error-soft: rgba(248, 113, 113, 0.15);
+
+  --border-color: #353B55;
+  --border-color-light: #444B6E;
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --sidebar-collapsed-width: 76px;
+  --navbar-height: 70px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-gold: 0 0 15px rgba(244, 199, 106, 0.25);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+}

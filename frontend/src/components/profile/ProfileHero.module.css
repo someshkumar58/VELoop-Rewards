@@ -1,0 +1,257 @@
+.heroCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.heroTopGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.identityCol {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.avatarWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--accent-gold);
+  box-shadow: var(--shadow-gold);
+}
+
+.levelBadgeMini {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background-color: var(--accent-gold);
+  color: #12141F;
+  font-weight: 800;
+  font-size: 0.72rem;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-card);
+}
+
+.userInfoCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.fullName {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.verifiedBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  background-color: var(--accent-blue-soft);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(110, 168, 254, 0.3);
+}
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.metaIcon {
+  color: var(--text-muted);
+}
+
+.identifiersRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.copyBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+}
+
+.copyLabel {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.copyValue {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.goldHighlight {
+  color: var(--accent-gold);
+}
+
+.copyActionBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.copyActionBtn:hover {
+  color: var(--accent-gold);
+  background-color: var(--bg-card);
+}
+
+.copiedIcon {
+  color: var(--status-success);
+}
+
+/* Level Progress Col */
+.levelProgressCol {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.levelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.levelRank {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goldText {
+  color: var(--accent-gold);
+}
+
+.levelTitleText {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.multiplierText {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background-color: var(--accent-gold-soft);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.levelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.remainingText {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.remainingText strong {
+  color: var(--text-primary);
+}
+
+.editBtn {
+  margin-left: auto;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .heroTopGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .identityCol {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nameRow {
+    justify-content: center;
+  }
+
+  .metaRow {
+    justify-content: center;
+  }
+
+  .identifiersRow {
+    justify-content: center;
+  }
+
+  .levelFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .editBtn {
+    width: 100%;
+    margin-left: 0;
+  }
+}

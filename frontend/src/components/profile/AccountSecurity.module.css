@@ -1,0 +1,79 @@
+.sectionWrap {
+  margin-bottom: 32px;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.securityGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.secRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.88rem;
+  gap: 12px;
+}
+
+.secRow:last-of-type {
+  border-bottom: none;
+}
+
+.secLabel {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.secVal {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.twoFaStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--status-success);
+  font-weight: 600;
+  font-size: 0.82rem;
+}
+
+.successColor {
+  color: var(--status-success);
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .securityGrid {
+    grid-template-columns: 1fr;
+  }
+}

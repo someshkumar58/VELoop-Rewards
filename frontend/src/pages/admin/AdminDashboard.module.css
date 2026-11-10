@@ -1,0 +1,347 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pageTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.pageSubtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+.statCard:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-color-light);
+  transform: translateY(-2px);
+}
+
+.statTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.statLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.statIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBlue {
+  background-color: var(--accent-blue-soft);
+  color: var(--accent-blue);
+  border: 1px solid rgba(110, 168, 254, 0.3);
+}
+
+.iconSuccess {
+  background-color: var(--status-success-soft);
+  color: var(--status-success);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.iconError {
+  background-color: var(--status-error-soft);
+  color: var(--status-error);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.iconGold {
+  background-color: var(--accent-gold-soft);
+  color: var(--accent-gold);
+  border: 1px solid rgba(244, 199, 106, 0.3);
+}
+
+.iconWarning {
+  background-color: var(--status-warning-soft);
+  color: var(--status-warning);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.iconPurple {
+  background-color: var(--accent-purple-soft);
+  color: var(--accent-purple);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+.statValue {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+
+.statFoot {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.footSuccess {
+  color: var(--status-success);
+  font-weight: 600;
+}
+
+.footWarning {
+  color: var(--status-warning);
+  font-weight: 600;
+}
+
+.footMuted {
+  color: var(--text-muted);
+}
+
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.distContent {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.distBarWrap {
+  width: 100%;
+  height: 14px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  display: flex;
+  border: 1px solid var(--border-color);
+}
+
+.distBarSegment {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.distLegendList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.84rem;
+}
+
+.legendLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legendDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.legendName {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.legendAmount {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.viewAllLink {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.viewAllLink:hover {
+  text-decoration: underline;
+}
+
+.adminLogList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.adminLogRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+  gap: 12px;
+}
+
+.logLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logAction {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.logTarget code {
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+}
+
+.logRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.logAdmin {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.logTime {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
+.activityFeed {
+  display: flex;
+  flex-direction: column;
+}
+
+.activityFeedRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.84rem;
+  gap: 16px;
+}
+
+.activityFeedRow:last-child {
+  border-bottom: none;
+}
+
+.feedUserCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+}
+
+.feedUser {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.feedTime {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.feedTypeCol {
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.feedAmountCol {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.feedAmount {
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+.emptyText {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 1200px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .middleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .activityFeedRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .feedAmountCol {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

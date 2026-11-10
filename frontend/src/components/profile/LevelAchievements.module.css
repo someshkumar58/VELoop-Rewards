@@ -1,0 +1,345 @@
+.sectionWrap {
+  margin-bottom: 28px;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 20px;
+}
+
+.levelCard, .achievementsCard {
+  height: 100%;
+}
+
+.levelBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rankBadgeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.rankLevel {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rankName {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 2px 0 0 0;
+}
+
+.multiplierBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.multLabel {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.multValue {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.progressStats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.progressStats strong {
+  color: var(--text-primary);
+}
+
+.remainingInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.remainingInfo strong {
+  color: var(--text-primary);
+}
+
+.pctBadge {
+  background-color: var(--accent-gold-soft);
+  color: var(--accent-gold);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.nextAchBox {
+  background-color: rgba(110, 168, 254, 0.06);
+  border: 1px solid rgba(110, 168, 254, 0.25);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nextAchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nextAchTag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-blue);
+}
+
+.rewardTag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background-color: var(--accent-gold-soft);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.nextAchContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nextAchIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-card);
+  border: 1px solid var(--accent-blue);
+  color: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nextAchDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.nextAchTitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.nextAchDesc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.nextAchBarWrap {
+  margin-top: 4px;
+}
+
+.nextAchReqText {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 4px;
+}
+
+/* Achievements List */
+.achList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.groupLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--status-success);
+  letter-spacing: 0.6px;
+}
+
+.successColor {
+  color: var(--status-success);
+}
+
+.lockedLabel {
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.badgeItemsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.achItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.unlockedItem:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--badge-theme);
+}
+
+.achIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background-color: rgba(244, 199, 106, 0.1);
+  border: 1px solid var(--badge-theme);
+  color: var(--badge-theme);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lockedItem {
+  opacity: 0.65;
+  background-color: rgba(22, 24, 39, 0.5);
+}
+
+.lockedIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.achTextWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.achTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.achTitle {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.achTitleLocked {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.xpPill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background-color: var(--accent-gold-soft);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+.xpPillMuted {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: var(--bg-card);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+.achDesc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0 0 4px 0;
+  line-height: 1.35;
+}
+
+.unlockedAt {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.lockedProgress {
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+@media (max-width: 992px) {
+  .gridContainer {
+    grid-template-columns: 1fr;
+  }
+}

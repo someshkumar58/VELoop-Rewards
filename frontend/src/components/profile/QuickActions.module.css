@@ -1,0 +1,192 @@
+.sectionWrap {
+  margin-bottom: 28px;
+}
+
+.sectionHeader {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.sectionSubtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.actionsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.actionCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.actionCard:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--action-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.pendingCard {
+  border-style: dashed;
+}
+
+.actionTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.iconBox {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--action-color);
+  transition: transform var(--transition-fast);
+}
+
+.actionCard:hover .iconBox {
+  transform: scale(1.05);
+}
+
+.activeBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--status-success);
+  background-color: var(--status-success-soft);
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+}
+
+.backendBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: var(--bg-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+}
+
+.actionContent {
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.actionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.actionDesc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cardArrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.actionCard:hover .cardArrow {
+  color: var(--action-color);
+}
+
+/* Modal styling */
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.statusBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+}
+
+.statusLabel {
+  color: var(--text-muted);
+}
+
+.statusVal {
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+
+.modalText {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.auditPromise {
+  font-size: 0.82rem;
+  color: var(--accent-blue);
+  background-color: rgba(110, 168, 254, 0.08);
+  border: 1px solid rgba(110, 168, 254, 0.2);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  line-height: 1.4;
+}
+
+@media (max-width: 1200px) {
+  .actionsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .actionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .actionsGrid {
+    grid-template-columns: 1fr;
+  }
+}
