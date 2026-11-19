@@ -1,345 +1,695 @@
 .sectionWrap {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .sectionHeader {
-  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
 }
 
 .sectionTitle {
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--text-primary);
   margin: 0 0 4px 0;
+  letter-spacing: 0.2px;
 }
 
 .sectionSubtitle {
-  font-size: 0.85rem;
+  font-size: 0.86rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
-.gridContainer {
-  display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 20px;
+.roadmapBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(244, 199, 106, 0.15) 0%, rgba(244, 199, 106, 0.05) 100%);
+  border: 1px solid rgba(244, 199, 106, 0.4);
+  color: var(--accent-gold);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all var(--transition-fast);
 }
 
-.levelCard, .achievementsCard {
-  height: 100%;
+.roadmapBtn:hover {
+  background: linear-gradient(135deg, rgba(244, 199, 106, 0.25) 0%, rgba(244, 199, 106, 0.1) 100%);
+  color: #FFFFFF;
+  border-color: var(--accent-gold);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(244, 199, 106, 0.2);
 }
 
-.levelBody {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+/* ==========================================================================
+   Hero Level Showcase Card
+   ========================================================================== */
+.heroLevelCard {
+  background: linear-gradient(135deg, #1B1E30 0%, #131626 100%);
+  border: 1px solid rgba(244, 199, 106, 0.25);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-.rankBadgeRow {
+.heroGlowOrb {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 199, 106, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+}
+
+.heroTopRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
 }
 
-.rankLevel {
-  font-size: 0.78rem;
-  font-weight: 700;
+.emblemAndInfo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.emblemWrapper {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #2A304C 0%, #1A1D2E 100%);
+  border: 2px solid var(--tier-accent, var(--accent-gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px var(--tier-glow, rgba(244, 199, 106, 0.3));
+  position: relative;
+  flex-shrink: 0;
+}
+
+.emblemIcon {
+  color: var(--tier-accent, var(--accent-gold));
+}
+
+.tierInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tierBadgePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(244, 199, 106, 0.12);
+  border: 1px solid rgba(244, 199, 106, 0.3);
   color: var(--accent-gold);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.rankName {
-  font-size: 1.25rem;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
   font-weight: 800;
-  color: var(--text-primary);
-  margin: 2px 0 0 0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  width: fit-content;
 }
 
-.multiplierBox {
+.rankTitle {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: 0.3px;
+}
+
+.tierSubtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.heroMultiplierBox {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  background: rgba(10, 12, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 12px 18px;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-.multLabel {
+.multiplierLabel {
   font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
   color: var(--text-muted);
+  font-weight: 700;
 }
 
-.multValue {
-  font-size: 1.1rem;
-  font-weight: 800;
+.multiplierValue {
+  font-size: 1.5rem;
+  font-weight: 900;
   color: var(--accent-gold);
+  line-height: 1.2;
 }
 
-.progressContainer {
+.multiplierSub {
+  font-size: 0.72rem;
+  color: var(--status-success);
+  font-weight: 600;
+}
+
+/* XP Progress Bar area */
+.progressArea {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.progressStats {
+.progressLabelRow {
   display: flex;
   justify-content: space-between;
-  font-size: 0.82rem;
+  align-items: center;
+  font-size: 0.84rem;
   color: var(--text-secondary);
 }
 
-.progressStats strong {
+.currentXPBold {
   color: var(--text-primary);
+  font-weight: 700;
 }
 
-.remainingInfo {
+.targetXPBold {
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+.customProgressBarWrap {
+  width: 100%;
+  height: 14px;
+  background-color: rgba(10, 12, 20, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.customProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #E5A93C 0%, #F4C76A 50%, #FFE29A 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-shadow: 0 0 12px rgba(244, 199, 106, 0.6);
+}
+
+.progressBottomRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.remainingHighlight {
   color: var(--text-secondary);
-  margin-top: 4px;
 }
 
-.remainingInfo strong {
-  color: var(--text-primary);
+.remainingHighlight strong {
+  color: var(--accent-gold);
 }
 
-.pctBadge {
-  background-color: var(--accent-gold-soft);
+.pctPill {
+  background: rgba(244, 199, 106, 0.15);
+  border: 1px solid rgba(244, 199, 106, 0.3);
   color: var(--accent-gold);
   padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-weight: 700;
-  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.76rem;
+  font-weight: 800;
 }
 
-.nextAchBox {
-  background-color: rgba(110, 168, 254, 0.06);
-  border: 1px solid rgba(110, 168, 254, 0.25);
-  border-radius: var(--radius-md);
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* ==========================================================================
+   Level Tier Roadmap Stepper
+   ========================================================================== */
+.roadmapSection {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  margin-bottom: 24px;
 }
 
-.nextAchHeader {
+.roadmapHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.nextAchTag {
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--accent-blue);
-}
-
-.rewardTag {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--accent-gold);
-  background-color: var(--accent-gold-soft);
-  padding: 1px 6px;
-  border-radius: var(--radius-full);
-}
-
-.nextAchContent {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.nextAchIcon {
-  width: 36px;
-  height: 36px;
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-card);
-  border: 1px solid var(--accent-blue);
-  color: var(--accent-blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.nextAchDetails {
-  display: flex;
-  flex-direction: column;
-}
-
-.nextAchTitle {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.nextAchDesc {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-}
-
-.nextAchBarWrap {
-  margin-top: 4px;
-}
-
-.nextAchReqText {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  text-align: right;
-  margin-top: 4px;
-}
-
-/* Achievements List */
-.achList {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-height: 480px;
-  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.groupLabel {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: var(--status-success);
-  letter-spacing: 0.6px;
-}
-
-.successColor {
-  color: var(--status-success);
-}
-
-.lockedLabel {
-  color: var(--text-muted);
-  margin-top: 8px;
-}
-
-.badgeItemsGrid {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.achItem {
+.roadmapTitle {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+.roadmapTrack {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
   gap: 12px;
-  padding: 12px;
-  background-color: var(--bg-secondary);
+  position: relative;
+}
+
+.tierStepCard {
+  background: rgba(10, 12, 20, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.tierStepCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tierStepUnlocked {
+  border-color: rgba(52, 211, 153, 0.35);
+  background: linear-gradient(180deg, rgba(52, 211, 153, 0.08) 0%, rgba(10, 12, 20, 0.4) 100%);
+}
+
+.tierStepCurrent {
+  border-color: var(--accent-gold);
+  background: linear-gradient(180deg, rgba(244, 199, 106, 0.16) 0%, rgba(10, 12, 20, 0.6) 100%);
+  box-shadow: 0 0 20px rgba(244, 199, 106, 0.2);
+}
+
+.tierStepLocked {
+  opacity: 0.65;
+}
+
+.tierStepIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+}
+
+.tierStepUnlocked .tierStepIconWrap {
+  background: rgba(52, 211, 153, 0.15);
+  border-color: #34D399;
+  color: #34D399;
+}
+
+.tierStepCurrent .tierStepIconWrap {
+  background: rgba(244, 199, 106, 0.2);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(244, 199, 106, 0.4);
+}
+
+.currentMarker {
+  position: absolute;
+  top: -10px;
+  background: var(--accent-gold);
+  color: #0A0C14;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.tierStepTitle {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.tierStepXP {
+  font-size: 0.72rem;
+  color: var(--accent-blue);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.tierStepMult {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(244, 199, 106, 0.1);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* ==========================================================================
+   Tier Perks & Rewards Matrix
+   ========================================================================== */
+.perksMatrixWrap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.perkCard {
+  background: rgba(10, 12, 20, 0.45);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   transition: all var(--transition-fast);
 }
 
-.unlockedItem:hover {
-  background-color: var(--bg-card-hover);
-  border-color: var(--badge-theme);
+.perkCard:hover {
+  border-color: rgba(244, 199, 106, 0.3);
+  transform: translateY(-2px);
 }
 
-.achIconWrap {
-  width: 38px;
-  height: 38px;
+.perkHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.perkIconWrap {
+  width: 34px;
+  height: 34px;
   border-radius: var(--radius-md);
-  background-color: rgba(244, 199, 106, 0.1);
-  border: 1px solid var(--badge-theme);
-  color: var(--badge-theme);
+  background: rgba(244, 199, 106, 0.12);
+  border: 1px solid rgba(244, 199, 106, 0.3);
+  color: var(--accent-gold);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.lockedItem {
-  opacity: 0.65;
-  background-color: rgba(22, 24, 39, 0.5);
+.perkTitle {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
 }
 
-.lockedIconWrap {
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
+.perkDesc {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Achievements Showcase Grid & Filters
+   ========================================================================== */
+.achievementsWrap {
   background-color: var(--bg-card);
   border: 1px solid var(--border-color);
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  border-radius: var(--radius-xl);
+  padding: 24px;
 }
 
-.achTextWrap {
-  flex: 1;
-  min-width: 0;
-}
-
-.achTop {
+.achTopBar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 2px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.achHeading {
+  display: flex;
+  flex-direction: column;
 }
 
 .achTitle {
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 800;
   color: var(--text-primary);
+  margin: 0 0 2px 0;
 }
 
-.achTitleLocked {
-  font-size: 0.88rem;
-  font-weight: 700;
+.achStatsSummary {
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
-.xpPill {
-  font-size: 0.72rem;
+.achFilterTabs {
+  display: flex;
+  background-color: rgba(10, 12, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 3px;
+}
+
+.filterBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
   font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtnActive {
+  background: linear-gradient(135deg, rgba(244, 199, 106, 0.2) 0%, rgba(244, 199, 106, 0.08) 100%);
   color: var(--accent-gold);
-  background-color: var(--accent-gold-soft);
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
+  border: 1px solid rgba(244, 199, 106, 0.4);
 }
 
-.xpPillMuted {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  background-color: var(--bg-card);
-  padding: 2px 6px;
-  border-radius: var(--radius-full);
+.achGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-.achDesc {
-  font-size: 0.78rem;
+.achCard {
+  background: rgba(10, 12, 20, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.achCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.achCardUnlocked {
+  border-color: rgba(244, 199, 106, 0.3);
+  background: linear-gradient(135deg, rgba(244, 199, 106, 0.04) 0%, rgba(10, 12, 20, 0.45) 100%);
+}
+
+.achCardUnlocked::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--rarity-color, var(--accent-gold));
+}
+
+.achCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.achIconAndRarity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.achIconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: rgba(10, 12, 20, 0.8);
+  border: 1.5px solid var(--rarity-color, var(--accent-gold));
+  color: var(--rarity-color, var(--accent-gold));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 12px var(--rarity-glow, rgba(244, 199, 106, 0.2));
+  flex-shrink: 0;
+}
+
+.achCardTitleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.achItemTitle {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rarityTag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--rarity-color, var(--accent-gold));
+}
+
+.xpRewardBadge {
+  background: rgba(244, 199, 106, 0.12);
+  border: 1px solid rgba(244, 199, 106, 0.3);
+  color: var(--accent-gold);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+.achItemDesc {
+  font-size: 0.82rem;
   color: var(--text-secondary);
-  margin: 0 0 4px 0;
-  line-height: 1.35;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
 }
 
-.unlockedAt {
-  font-size: 0.7rem;
+.achFooter {
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.unlockedStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #34D399;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.lockedStatusBar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lockedTextRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.74rem;
   color: var(--text-muted);
 }
 
-.lockedProgress {
-  font-size: 0.7rem;
-  color: var(--accent-blue);
-  font-weight: 600;
+.lockedTextRow strong {
+  color: var(--text-secondary);
 }
 
-@media (max-width: 992px) {
-  .gridContainer {
+.miniProgressBar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(10, 12, 20, 0.7);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.miniProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #6EA8FE 0%, #A78BFA 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .roadmapTrack {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .perksMatrixWrap {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .roadmapTrack {
     grid-template-columns: 1fr;
+  }
+  .perksMatrixWrap {
+    grid-template-columns: 1fr;
+  }
+  .heroTopRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .heroMultiplierBox {
+    align-items: flex-start;
+    width: 100%;
   }
 }

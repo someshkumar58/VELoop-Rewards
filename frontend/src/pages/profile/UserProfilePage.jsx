@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 import { profileService } from '../../services/profileService';
+import { PREVIEW_USER } from '../../constants/previewData';
 
 import ProfileHero from '../../components/profile/ProfileHero';
 import RewardAssets from '../../components/profile/RewardAssets';
@@ -21,7 +22,7 @@ import Modal from '../../components/common/Modal';
 import Button from '../../components/common/Button';
 
 const UserProfilePage = () => {
-  const { user, isDevPreview, updateUserProfile, logoutUser } = useAuth();
+  const { user, isDevPreview, setIsDevPreview, updateUserProfile, logoutUser } = useAuth();
   const { addToast } = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -75,12 +76,35 @@ const UserProfilePage = () => {
       setActivities(actRes.data);
     } catch (err) {
       console.error('[UserProfilePage] Failed to fetch data:', err);
-      setError(err.message || 'Unable to communicate with the profile service. Please verify backend status.');
-      setProfileData(null);
+      const is401 = err.status === 401 ||
+        err.statusCode === 401 ||
+        String(err.message || '').includes('401') ||
+        String(err.message || '').includes('Authentication required') ||
+        String(err.message || '').includes('Unauthorized') ||
+        String(err.message || '').includes('No token provided');
+
+      if (is401) {
+        console.warn('[UserProfilePage] Unauthenticated (401) — falling back to Preview User mode');
+        if (setIsDevPreview) {
+          setIsDevPreview(true);
+        }
+        localStorage.setItem('veloop_dev_preview', 'true');
+        setProfileData(PREVIEW_USER);
+        setRewards(PREVIEW_USER.rewards || {});
+        setLevelProgress(PREVIEW_USER.levelProgress || {});
+        setAchievements(PREVIEW_USER.achievements || []);
+        setWithdrawals(PREVIEW_USER.withdrawals || {});
+        setReferrals(PREVIEW_USER.referrals || {});
+        setActivities(PREVIEW_USER.recentActivities || []);
+        setError(null);
+      } else {
+        setError(err.message || 'Unable to communicate with the profile service. Please verify backend status.');
+        setProfileData(null);
+      }
     } finally {
       setLoading(false);
     }
-  }, [isDevPreview]);
+  }, [isDevPreview, setIsDevPreview]);
 
   useEffect(() => {
     loadProfileData();

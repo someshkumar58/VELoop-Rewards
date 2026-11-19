@@ -6,35 +6,37 @@ import { PREVIEW_USER } from '../constants/previewData';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // Read initial Dev Preview setting (can be overridden in localStorage for testing)
+  // Read initial Dev Preview setting: default to true whenever no auth token is present
   const [isDevPreview, setIsDevPreview] = useState(() => {
-    const saved = localStorage.getItem('veloop_dev_preview');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('veloop_auth_token') : null;
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('veloop_dev_preview') : null;
     if (saved !== null) {
       return saved === 'true';
+    }
+    // If no real user token is present, initialize Dev Preview to true so visitor never sees 401 error
+    if (!token) {
+      return true;
     }
     return import.meta.env.VITE_ENABLE_DEV_PREVIEW === 'true';
   });
 
   const [user, setUser] = useState(() => {
-    const token = localStorage.getItem('veloop_auth_token');
-    const saved = localStorage.getItem('veloop_user_profile');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('veloop_auth_token') : null;
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('veloop_user_profile') : null;
     if (token && saved) {
       try {
         return JSON.parse(saved);
       } catch {
-        return null;
+        return PREVIEW_USER;
       }
     }
-    // In dev preview mode, initialize default preview user if not authenticated
-    if (isDevPreview) {
-      return PREVIEW_USER;
-    }
-    return saved ? JSON.parse(saved) : null;
+    // When unauthenticated, initialize with PREVIEW_USER so profile renders seamlessly
+    return PREVIEW_USER;
   });
 
   const [admin, setAdmin] = useState(() => {
-    const savedAdmin = localStorage.getItem('veloop_admin_profile');
-    const token = localStorage.getItem('veloop_admin_token');
+    const savedAdmin = typeof window !== 'undefined' ? localStorage.getItem('veloop_admin_profile') : null;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('veloop_admin_token') : null;
     if (token && savedAdmin) {
       try {
         return JSON.parse(savedAdmin);
@@ -78,6 +80,8 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = (token, userProfile) => {
     localStorage.setItem('veloop_auth_token', token);
+    localStorage.setItem('veloop_dev_preview', 'false');
+    setIsDevPreview(false);
     if (userProfile) {
       localStorage.setItem('veloop_user_profile', JSON.stringify(userProfile));
       setUser(userProfile);
@@ -92,6 +96,33 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('veloop_auth_token', response.data.token);
         const userProfile = response.data.user;
         localStorage.setItem('veloop_user_profile', JSON.stringify(userProfile));
+        localStorage.setItem('veloop_dev_preview', 'false');
+        setIsDevPreview(false);
+        setUser(userProfile);
+      }
+      return response.data;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const registerWithCredentials = async (name, email, password, referralCode) => {
+    setIsLoading(true);
+    try {
+      const payload = {
+        name,
+        fullName: name,
+        email,
+        password,
+        ...(referralCode ? { referralCode, refCode: referralCode } : {})
+      };
+      const response = await apiClient.post('/auth/register', payload);
+      if (response.data && response.data.token) {
+        localStorage.setItem('veloop_auth_token', response.data.token);
+        const userProfile = response.data.user;
+        localStorage.setItem('veloop_user_profile', JSON.stringify(userProfile));
+        localStorage.setItem('veloop_dev_preview', 'false');
+        setIsDevPreview(false);
         setUser(userProfile);
       }
       return response.data;
@@ -103,7 +134,9 @@ export const AuthProvider = ({ children }) => {
   const logoutUser = () => {
     localStorage.removeItem('veloop_auth_token');
     localStorage.removeItem('veloop_user_profile');
-    setUser(null);
+    localStorage.setItem('veloop_dev_preview', 'true');
+    setIsDevPreview(true);
+    setUser(PREVIEW_USER);
   };
 
   const updateUserProfile = (newProfileData) => {
@@ -116,20 +149,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const hasRealToken = typeof window !== 'undefined' && !!localStorage.getItem('veloop_auth_token');
+
   return (
     <AuthContext.Provider
       value={{
         user,
         admin,
         isAuthenticated: !!user,
+        isRealUser: hasRealToken && !isDevPreview,
+        hasRealToken,
         isAdminAuthenticated: !!admin,
         isLoading,
         isDevPreview,
+        setIsDevPreview,
         toggleDevPreview,
         loginAdmin,
         logoutAdmin,
         loginUser,
         loginWithCredentials,
+        registerWithCredentials,
         logoutUser,
         updateUserProfile,
       }}

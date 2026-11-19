@@ -10,6 +10,7 @@ import AdminLayout from './layouts/AdminLayout';
 
 // Profile Page
 import UserProfilePage from './pages/profile/UserProfilePage';
+import LevelsPage from './pages/profile/LevelsPage';
 
 // Admin Pages
 import AdminLoginPage from './pages/admin/AdminLoginPage';
@@ -39,6 +40,7 @@ function App() {
             <Route element={<UserProfileLayout />}>
               <Route path="/" element={<Navigate to="/user-profile" replace />} />
               <Route path="/user-profile" element={<UserProfilePage />} />
+              <Route path="/levels" element={<LevelsPage />} />
             </Route>
 
             {/* Admin Login (Public entry) */}

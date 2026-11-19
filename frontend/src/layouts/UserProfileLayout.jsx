@@ -13,28 +13,32 @@ import {
   Coins,
   Sparkles,
   ExternalLink,
-  Crown
+  Crown,
+  LogIn
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import DevPreviewBanner from '../components/common/DevPreviewBanner';
+import UserAuthModal from '../components/auth/UserAuthModal';
 import styles from './UserProfileLayout.module.css';
 
 const UserProfileLayout = () => {
-  const { user, logoutUser, isAdminAuthenticated } = useAuth();
+  const { user, logoutUser, isAdminAuthenticated, hasRealToken, isDevPreview } = useAuth();
   const { addToast } = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleLogout = () => {
     logoutUser();
-    addToast('You have logged out successfully.', 'info');
+    addToast('You have logged out. Restored Demo Preview session.', 'info');
     navigate('/user-profile');
   };
 
   const navItems = [
     { label: 'Profile Overview', icon: User, path: '/user-profile' },
+    { label: 'Levels & Roadmap', icon: Award, path: '/levels', badge: `Lv.${user?.levelProgress?.currentLevel || 4}` },
     { label: 'Admin Portal', icon: ShieldCheck, path: isAdminAuthenticated ? '/admin/dashboard' : '/admin/login', badge: isAdminAuthenticated ? 'Active' : 'Login' },
   ];
 
@@ -87,6 +91,32 @@ const UserProfileLayout = () => {
                 </span>
               </div>
             </div>
+          )}
+
+          {/* User Login or Live Mode Status */}
+          {hasRealToken && !isDevPreview ? (
+            <div className={styles.liveUserBadge} title="Authenticated in Live API Mode with MongoDB">
+              <span className={styles.livePulseDot} />
+              <span>Live: {user?.fullName?.split(' ')[0] || user?.name?.split(' ')[0] || 'User'}</span>
+              <button
+                type="button"
+                className={styles.miniLogoutBtn}
+                onClick={handleLogout}
+                title="Log out and restore Demo Mode"
+              >
+                <LogOut size={13} />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className={styles.userLoginBtn}
+              onClick={() => setShowAuthModal(true)}
+              title="Sign in with live account or create one"
+            >
+              <LogIn size={15} />
+              <span>User Login</span>
+            </button>
           )}
 
           <Link
@@ -210,6 +240,12 @@ const UserProfileLayout = () => {
           <Outlet />
         </main>
       </div>
+
+      {/* User Login & Register Modal */}
+      <UserAuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </div>
   );
 };

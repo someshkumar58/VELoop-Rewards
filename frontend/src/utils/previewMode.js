@@ -1,17 +1,25 @@
 /**
- * Utility to determine whether Development Preview Mode is active.
- * In production builds (import.meta.env.PROD === true), preview mode
- * is strictly disabled to prevent bypass of real backend authentication.
+ * Utility to determine whether Development Preview / Demo Mode is active.
+ * Defaults to true whenever no authenticated user token is present in localStorage,
+ * allowing live demo exploration without unauthenticated 401 errors.
+ * Automatically switches to false once a user logs in with real credentials.
  */
 export const isPreviewModeActive = () => {
-  if (import.meta.env.PROD) {
+  if (typeof window === 'undefined') {
     return false;
   }
 
-  const saved = typeof window !== 'undefined' ? localStorage.getItem('veloop_dev_preview') : null;
+  const saved = localStorage.getItem('veloop_dev_preview');
   if (saved !== null) {
     return saved === 'true';
   }
 
-  return import.meta.env.VITE_ENABLE_DEV_PREVIEW === 'true';
+  // If user has a real JWT token stored, default to live mode
+  const token = localStorage.getItem('veloop_auth_token');
+  if (token) {
+    return false;
+  }
+
+  // When unauthenticated, default to true so visitors see preview data smoothly
+  return true;
 };
