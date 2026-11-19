@@ -1,0 +1,292 @@
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--text-primary);
+}
+
+.bannerNotice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: rgba(110, 168, 254, 0.12);
+  border: 1px solid rgba(110, 168, 254, 0.35);
+  color: var(--accent-blue);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 0.82rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.statCard {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.statLabel {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+
+.statValue {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  font-family: var(--font-mono);
+}
+
+.statValueNormal {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rewardHighlightBox {
+  background: linear-gradient(135deg, rgba(244, 199, 106, 0.12) 0%, rgba(110, 168, 254, 0.08) 100%);
+  border: 1px solid rgba(244, 199, 106, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rewardLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background-color: rgba(244, 199, 106, 0.2);
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rewardHeading {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rewardSub {
+  margin: 2px 0 0 0;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.multiplierPill {
+  background-color: rgba(244, 199, 106, 0.25);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+}
+
+/* Simulated Video Screen */
+.videoScreen {
+  background: radial-gradient(circle at center, #1b2038 0%, #0d101e 100%);
+  border: 1px solid rgba(110, 168, 254, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 28px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  min-height: 220px;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.videoBadge {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #34D399;
+  background-color: rgba(52, 211, 153, 0.15);
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+}
+
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #34D399;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.pulseIconWrap {
+  margin-bottom: 12px;
+  color: var(--accent-gold);
+  animation: float 2.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.videoTitle {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: var(--text-primary);
+}
+
+.videoSubtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  max-width: 380px;
+  margin: 0 0 16px 0;
+}
+
+.countdownPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(248, 113, 113, 0.18);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #F87171;
+  font-weight: 800;
+  font-size: 0.88rem;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+}
+
+.progressContainer {
+  width: 100%;
+  max-width: 360px;
+}
+
+.lockNotice {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Success State Screen */
+.successScreen {
+  background: radial-gradient(circle at center, rgba(52, 211, 153, 0.12) 0%, rgba(13, 16, 30, 0.8) 100%);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.celebrationIcon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(52, 211, 153, 0.2);
+  color: #34D399;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.earnedAmount {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  font-family: var(--font-mono);
+  margin: 0;
+}
+
+.successDesc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.balanceNotice {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 16px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Cooldown / Limit Notice Card */
+.alertCard {
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  color: #F87171;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.84rem;
+}
+
+.alertCardTitle {
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: #F87171;
+}
+
+.alertCardDesc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.loadingCenter {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+

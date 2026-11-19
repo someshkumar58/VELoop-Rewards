@@ -22,6 +22,13 @@ export const API_ENDPOINTS = {
     CHECK_IN: '/profile/check-in',
   },
 
+  // Ads & Video Rewards (Phase 2B)
+  ADS: {
+    STATUS: '/ads/status',
+    START_SESSION: '/ads/start-session',
+    CLAIM_REWARD: '/ads/claim-reward',
+  },
+
   // Admin Management
   ADMIN: {
     STATS: '/admin/dashboard/stats',

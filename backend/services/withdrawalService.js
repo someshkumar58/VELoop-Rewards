@@ -564,6 +564,33 @@ async function reviewWithdrawal(withdrawalId, adminId, payload = {}) {
         if (u) updatedWithdrawal.user = u;
       }
 
+      // 4. Create AdminAuditLog entry
+      if (mongoose.connection && mongoose.connection.readyState === 1) {
+        try {
+          const AdminAuditLog = require('../models/AdminAuditLog');
+          const adminUser = await User.findById(adminId);
+          const adminIdentity = adminUser ? `${adminUser.email} (${adminUser.role || 'Admin'})` : String(adminId);
+          const logData = {
+            adminId,
+            adminUser: adminIdentity,
+            actionType: rawDecision === 'APPROVED' ? 'WITHDRAWAL_APPROVAL' : 'WITHDRAWAL_REJECTION',
+            entityType: 'Withdrawal',
+            entityId: withdrawal.requestId,
+            previousValue: 'Status: PENDING',
+            newValue: `Status: ${rawDecision} (${withdrawal.requestedAmount} Tokens)`,
+            reason: reason || (rawDecision === 'APPROVED' ? 'Administrative approval of withdrawal request' : 'Administrative rejection of withdrawal request'),
+            timestamp: new Date()
+          };
+          if (activeSession) {
+            await AdminAuditLog.create([logData], { session: activeSession });
+          } else {
+            await AdminAuditLog.create(logData);
+          }
+        } catch (logErr) {
+          console.warn('[Withdrawal Audit Log Warning]:', logErr.message);
+        }
+      }
+
       return updatedWithdrawal;
     };
 

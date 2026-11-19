@@ -1,5 +1,9 @@
 const User = require('../models/User');
 const Wallet = require('../models/Wallet');
+const DailyCheckIn = require('../models/DailyCheckIn');
+const AdImpression = require('../models/AdImpression');
+const Withdrawal = require('../models/Withdrawal');
+const UserAchievement = require('../models/UserAchievement');
 const { calculateLevelProgress } = require('../services/levelService');
 const achievementService = require('../services/achievementService');
 const streakService = require('../services/streakService');
@@ -410,6 +414,216 @@ const performCheckIn = async (req, res) => {
   }
 };
 
+/**
+ * Helper to generate human-readable relative time description
+ * @param {Date|string} date 
+ * @returns {string}
+ */
+function formatRelativeTime(date) {
+  if (!date) return 'Recently';
+  const now = Date.now();
+  const d = new Date(date).getTime();
+  if (isNaN(d)) return 'Recently';
+  const diffMs = Math.max(0, now - d);
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+/**
+ * @route   GET /api/profile/referrals
+ * @desc    Retrieve authenticated user's referral metrics, active code, and referred users
+ * @access  Private (Bearer JWT required)
+ */
+const getReferrals = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User profile not found.'
+      });
+    }
+
+    const referralCode = user.referralCode || `VEL-${user._id.toString().slice(-6).toUpperCase()}`;
+
+    // Query all users registered with this user's referral code
+    const referredUsers = await User.find({ referredBy: referralCode })
+      .select('name fullName email accountStatus createdAt')
+      .sort({ createdAt: -1 });
+
+    const totalReferrals = referredUsers.length;
+    const successfulReferrals = referredUsers.filter((u) => u.accountStatus === 'Active').length;
+    const pendingReferrals = referredUsers.filter((u) => u.accountStatus !== 'Active').length;
+
+    // Platform business rule: 100 VEs and 200 XP per active referred friend
+    const referralRewardsVEs = successfulReferrals * 100;
+    const referralXPEarned = successfulReferrals * 200;
+
+    // Milestone calculation (tiers: 5, 20, 50, 100)
+    let currentMilestoneTarget = 5;
+    let milestoneReward = '250 Bonus VEs';
+
+    if (successfulReferrals >= 50) {
+      currentMilestoneTarget = 100;
+      milestoneReward = '5000 Bonus VEs + Diamond Ambassador Badge';
+    } else if (successfulReferrals >= 20) {
+      currentMilestoneTarget = 50;
+      milestoneReward = '1500 Bonus VEs + Gold Ambassador Badge';
+    } else if (successfulReferrals >= 5) {
+      currentMilestoneTarget = 20;
+      milestoneReward = '500 Bonus VEs + Silver Ambassador Badge';
+    }
+
+    const milestonePercentage = Math.min(
+      100,
+      Math.round((successfulReferrals / currentMilestoneTarget) * 100)
+    );
+
+    const payload = {
+      referralCode,
+      totalReferrals,
+      successfulReferrals,
+      pendingReferrals,
+      referralRewardsVEs,
+      referralXPEarned,
+      currentMilestoneTarget,
+      milestoneCurrentCount: successfulReferrals,
+      milestoneReward,
+      milestonePercentage,
+      referredUsers: referredUsers.map((u) => ({
+        id: u._id.toString(),
+        name: u.fullName || u.name,
+        email: u.email,
+        status: u.accountStatus,
+        createdAt: u.createdAt
+      }))
+    };
+
+    return res.status(200).json({
+      success: true,
+      referrals: payload,
+      data: payload
+    });
+  } catch (error) {
+    console.error('[Get Referrals Error]:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error retrieving referral information.'
+    });
+  }
+};
+
+/**
+ * @route   GET /api/profile/activity
+ * @desc    Aggregate chronological recent activity ledger (check-ins, ads, withdrawals, achievements)
+ * @access  Private (Bearer JWT required)
+ */
+const getActivity = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Fetch records concurrently across persisted modules
+    const [checkIns, adImpressions, withdrawals, achievements] = await Promise.all([
+      DailyCheckIn.find({ user: userId }).sort({ createdAt: -1 }).limit(15).lean(),
+      AdImpression.find({ userId, status: { $in: ['COMPLETED', 'CLAIMED'] } }).sort({ completedAt: -1, createdAt: -1 }).limit(15).lean(),
+      Withdrawal.find({ user: userId }).sort({ createdAt: -1 }).limit(15).lean(),
+      UserAchievement.find({ user: userId }).sort({ unlockedAt: -1, createdAt: -1 }).limit(15).lean()
+    ]);
+
+    const activityList = [];
+
+    // 1. Daily Check-in activities
+    for (const item of (checkIns || [])) {
+      const d = item.createdAt || new Date(item.checkInDate);
+      activityList.push({
+        id: `act_checkin_${item._id}`,
+        type: 'DAILY_BONUS',
+        title: `Daily Streak Bonus (Day ${item.streakCount})`,
+        amount: `+${item.rewardVEs || 25} VEs`,
+        assetType: 'ves',
+        timestamp: formatRelativeTime(d),
+        status: 'Completed',
+        icon: 'Gift',
+        createdAt: d
+      });
+    }
+
+    // 2. Ad Watching activities
+    for (const item of (adImpressions || [])) {
+      const d = item.completedAt || item.createdAt;
+      activityList.push({
+        id: `act_ad_${item._id}`,
+        type: 'AD_REWARD',
+        title: 'Sponsored Partner Ad View',
+        amount: `+${item.earnedReward || 15} VEs`,
+        assetType: 'ves',
+        timestamp: formatRelativeTime(d),
+        status: 'Completed',
+        icon: 'PlaySquare',
+        createdAt: d
+      });
+    }
+
+    // 3. Withdrawal activities
+    for (const item of (withdrawals || [])) {
+      const d = item.createdAt;
+      const statusLabel = item.status === 'APPROVED' ? 'Approved' : item.status === 'REJECTED' ? 'Rejected' : 'Pending';
+      activityList.push({
+        id: `act_withdrawal_${item._id}`,
+        type: 'WITHDRAWAL',
+        title: `Payout Request (${(item.payoutMethod || 'Tokens').replace(/_/g, ' ')})`,
+        amount: `-${Number(item.requestedAmount).toFixed(2)} Tokens`,
+        assetType: 'tokens',
+        timestamp: formatRelativeTime(d),
+        status: statusLabel,
+        icon: 'ArrowDownRight',
+        createdAt: d
+      });
+    }
+
+    // 4. Achievement unlock activities
+    for (const item of (achievements || [])) {
+      const d = item.unlockedAt || item.createdAt;
+      activityList.push({
+        id: `act_ach_${item._id}`,
+        type: 'XP_EARNED',
+        title: `Achievement Unlocked: ${(item.achievementCode || '').replace(/_/g, ' ')}`,
+        amount: `+${item.xpAwarded} XP`,
+        assetType: 'xp',
+        timestamp: formatRelativeTime(d),
+        status: 'Completed',
+        icon: 'TrendingUp',
+        createdAt: d
+      });
+    }
+
+    // Sort all aggregated activities chronologically descending
+    activityList.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // Limit to top 20 most recent events
+    const topActivities = activityList.slice(0, 20);
+
+    return res.status(200).json({
+      success: true,
+      activities: topActivities,
+      data: topActivities,
+      total: topActivities.length
+    });
+  } catch (error) {
+    console.error('[Get Activity Error]:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error retrieving recent activity stream.'
+    });
+  }
+};
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -417,6 +631,8 @@ module.exports = {
   getLevelProgress,
   getAchievements,
   getCheckInStatus,
-  performCheckIn
+  performCheckIn,
+  getReferrals,
+  getActivity
 };
 

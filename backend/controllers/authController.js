@@ -14,7 +14,7 @@ const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z
  */
 const register = async (req, res) => {
   try {
-    const { name, fullName, email, password } = req.body || {};
+    const { name, fullName, email, password, referralCode: customReferralCode, referredBy, refCode } = req.body || {};
     const candidateName = (name || fullName || '').trim();
 
     // 1. Validate required fields
@@ -80,6 +80,14 @@ const register = async (req, res) => {
     let user;
     let wallet;
 
+    const candidateReferralCode = (customReferralCode && typeof customReferralCode === 'string' && customReferralCode.trim().length >= 3)
+      ? customReferralCode.trim().toUpperCase()
+      : `VEL-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+    const candidateReferredBy = (referredBy || refCode)
+      ? String(referredBy || refCode).trim().toUpperCase()
+      : null;
+
     if (useTransaction && session) {
       try {
         const createdUsers = await User.create(
@@ -88,7 +96,9 @@ const register = async (req, res) => {
               name: candidateName,
               email: normalizedEmail,
               passwordHash,
-              role: 'user'
+              role: 'user',
+              referralCode: candidateReferralCode,
+              referredBy: candidateReferredBy
             }
           ],
           { session }
@@ -123,7 +133,9 @@ const register = async (req, res) => {
         name: candidateName,
         email: normalizedEmail,
         passwordHash,
-        role: 'user'
+        role: 'user',
+        referralCode: candidateReferralCode,
+        referredBy: candidateReferredBy
       });
 
       try {

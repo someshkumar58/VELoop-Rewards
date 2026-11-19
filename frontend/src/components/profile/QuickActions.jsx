@@ -15,7 +15,7 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import styles from './QuickActions.module.css';
 
-const QuickActions = ({ onRequestWithdrawal, onOpenDailyCheckIn }) => {
+const QuickActions = ({ onRequestWithdrawal, onOpenDailyCheckIn, onOpenWatchAds }) => {
   const [selectedAction, setSelectedAction] = useState(null);
 
   const actions = [
@@ -70,7 +70,9 @@ const QuickActions = ({ onRequestWithdrawal, onOpenDailyCheckIn }) => {
       description: 'Earn +15 VEs per sponsored video watch.',
       icon: Tv,
       color: '#F87171',
-      type: 'pending_backend',
+      type: onOpenWatchAds ? 'function' : 'pending_backend',
+      handler: onOpenWatchAds,
+      badge: onOpenWatchAds ? 'Active' : 'Pending',
       details: {
         title: 'Ad Provider SDK Integration (Backend Pending)',
         desc: 'Integration endpoint: POST /api/ads/verify-impression. Requires server-side ad network callbacks (e.g. AdMob / Unity Ads SSV webhook) to prevent client fraud.',

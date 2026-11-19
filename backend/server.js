@@ -7,14 +7,17 @@ const learningRoutes = require('./routes/learningRoutes');
 const authRoutes = require('./routes/authRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes');
 const adminWithdrawalRoutes = require('./routes/adminWithdrawalRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const adRoutes = require('./routes/adRoutes');
 
 const app = express();
 
 // Middleware
-const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+const rawOrigin = process.env.CLIENT_ORIGIN || process.env.FRONTEND_URL || 'http://localhost:5173';
+const allowedOrigins = rawOrigin.includes(',') ? rawOrigin.split(',').map(s => s.trim()) : rawOrigin;
 app.use(cors({
-  origin: frontendUrl,
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -40,6 +43,12 @@ app.use('/api/profile', profileRoutes);
 
 // Step 11: Admin Withdrawal Management Module
 app.use('/api/admin/withdrawals', adminWithdrawalRoutes);
+
+// Admin Management Console & Security Audit Ledger
+app.use('/api/admin', adminRoutes);
+
+// Phase 2B.1: Ad Watching & Reward Engine Module
+app.use('/api/ads', adRoutes);
 
 // Error handling middleware for malformed JSON and unexpected server errors
 app.use((err, req, res, next) => {
@@ -71,7 +80,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
-      console.log(`Accepting requests from: ${frontendUrl}`);
+      console.log(`Accepting requests from: ${rawOrigin}`);
     });
   } catch (error) {
     console.error(`[Server Startup Aborted] Server will not start: ${error.message}`);

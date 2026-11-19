@@ -39,6 +39,12 @@ router.post('/withdrawals', withdrawalController.createWithdrawal);
 // GET /api/profile/withdrawal-summary
 router.get('/withdrawal-summary', withdrawalController.getWithdrawalSummary);
 
+// GET /api/profile/referrals (Matches frontend API_ENDPOINTS.PROFILE.REFERRALS)
+router.get('/referrals', profileController.getReferrals);
+
+// GET /api/profile/activity (Matches frontend API_ENDPOINTS.PROFILE.ACTIVITY)
+router.get('/activity', profileController.getActivity);
+
 module.exports = router;
 
 

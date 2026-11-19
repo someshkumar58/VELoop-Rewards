@@ -16,10 +16,10 @@ try {
  * @returns {Promise<mongoose.Connection>}
  */
 const connectDB = async () => {
-  let uri = process.env.MONGODB_URI;
+  let uri = process.env.MONGODB_URI || process.env.MONGO_URI;
 
   if (!uri || typeof uri !== 'string' || !uri.trim()) {
-    const errorMsg = 'MONGODB_URI is not defined in environment variables (.env). Cannot connect to database.';
+    const errorMsg = 'MONGODB_URI or MONGO_URI is not defined in environment variables (.env). Cannot connect to database.';
     console.error(`[Database Error] ${errorMsg}`);
     throw new Error(errorMsg);
   }

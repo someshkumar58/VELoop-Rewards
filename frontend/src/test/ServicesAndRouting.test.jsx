@@ -49,6 +49,28 @@ describe('Services, API Contract & Routing Isolation Suite', () => {
       expect(withdrawals.data.successfullyWithdrawnAmount).toBe(320.00);
       expect(withdrawals.data.pendingAmount).toBe(45.00);
     });
+
+    it('fetches referrals snapshot with milestone and reward stats', async () => {
+      const referrals = await profileService.getReferrals();
+      expect(referrals.data).toBeDefined();
+      expect(referrals.data).toHaveProperty('referralCode');
+      expect(referrals.data).toHaveProperty('totalReferrals');
+      expect(referrals.data).toHaveProperty('successfulReferrals');
+      expect(referrals.data).toHaveProperty('referralRewardsVEs');
+      expect(referrals.data).toHaveProperty('milestonePercentage');
+    });
+
+    it('fetches recent user activity stream with ledger details', async () => {
+      const activity = await profileService.getRecentActivity();
+      expect(activity.data).toBeDefined();
+      expect(Array.isArray(activity.data)).toBe(true);
+      if (activity.data.length > 0) {
+        expect(activity.data[0]).toHaveProperty('id');
+        expect(activity.data[0]).toHaveProperty('type');
+        expect(activity.data[0]).toHaveProperty('amount');
+        expect(activity.data[0]).toHaveProperty('status');
+      }
+    });
   });
 
   describe('adminService', () => {

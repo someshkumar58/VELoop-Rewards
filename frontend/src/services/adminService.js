@@ -26,49 +26,52 @@ export const adminService = {
    * In Production (PROD), demo credentials bypass is strictly disabled.
    */
   async login(email, password) {
-    // If demo credentials are explicitly submitted in preview mode, allow quick demo session
-    if (isPreviewModeActive() && email === 'admin@veloop.io' && password === 'Admin@2026') {
-      await simulateDelay(250);
-      const demoAuth = {
-        token: 'demo_admin_jwt_token_sample_not_for_prod',
-        admin: {
-          id: 'adm_01',
-          email: 'admin@veloop.io',
-          name: 'System Administrator',
-          role: 'admin'
-        }
-      };
-      localStorage.setItem('veloop_admin_token', demoAuth.token);
-      localStorage.setItem('veloop_admin_profile', JSON.stringify(demoAuth.admin));
-      return { success: true, ...demoAuth, isDemoData: true };
+    try {
+      // Real backend request to MongoDB Atlas
+      const response = await apiClient.post(API_ENDPOINTS.AUTH.ADMIN_LOGIN, { email, password });
+      if (response.data?.token) {
+        localStorage.setItem('veloop_admin_token', response.data.token);
+        localStorage.setItem('veloop_admin_profile', JSON.stringify(response.data.admin));
+      }
+      return { ...response.data, isDemoData: false };
+    } catch (err) {
+      // If demo credentials are submitted in preview/offline mode, fallback to demo session
+      if (isPreviewModeActive() && email === 'admin@veloop.io' && password === 'Admin@2026') {
+        await simulateDelay(250);
+        const demoAuth = {
+          token: 'demo_admin_jwt_token_sample_not_for_prod',
+          admin: {
+            id: 'adm_01',
+            email: 'admin@veloop.io',
+            name: 'System Administrator',
+            role: 'admin'
+          }
+        };
+        localStorage.setItem('veloop_admin_token', demoAuth.token);
+        localStorage.setItem('veloop_admin_profile', JSON.stringify(demoAuth.admin));
+        return { success: true, ...demoAuth, isDemoData: true };
+      }
+      throw err;
     }
-
-    // Real backend request to MongoDB Atlas
-    const response = await apiClient.post(API_ENDPOINTS.AUTH.ADMIN_LOGIN, { email, password });
-    if (response.data?.token) {
-      localStorage.setItem('veloop_admin_token', response.data.token);
-      localStorage.setItem('veloop_admin_profile', JSON.stringify(response.data.admin));
-    }
-    return { ...response.data, isDemoData: false };
   },
 
   /**
    * Fetch Admin Dashboard Overview Statistics
    */
   async getDashboardStats() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_ADMIN_DASHBOARD, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.STATS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   /**
    * User Management: List users with search, filter, sort
    */
   async getUsers(params = {}) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       let users = [...PREVIEW_USERS_LIST];
       if (params.search) {
@@ -98,7 +101,7 @@ export const adminService = {
    * User Details by ID
    */
   async getUserDetails(id) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       const user = PREVIEW_USERS_LIST.find(u => u.id === id || u.userId === id);
       if (!user) {
@@ -110,14 +113,14 @@ export const adminService = {
       return { data: user, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.USER_DETAILS(id));
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.user || response.data?.data || response.data, isDemoData: false };
   },
 
   /**
    * Update User Account Status (Suspend / Restore)
    */
   async updateUserStatus(id, status, reason) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay(300);
       return {
         success: true,
@@ -133,7 +136,7 @@ export const adminService = {
    * Reward Management: Fetch overview and balances
    */
   async getRewardsOverview() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return {
         data: {
@@ -146,14 +149,14 @@ export const adminService = {
       };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.REWARDS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   /**
    * Reward Adjustment UI: Adjust balance with audit reason
    */
   async adjustUserReward(payload) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay(300);
       return {
         success: true,
@@ -162,23 +165,23 @@ export const adminService = {
       };
     }
     const response = await apiClient.post(API_ENDPOINTS.ADMIN.REWARD_ADJUST, payload);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data, message: response.data?.message, isDemoData: false };
   },
 
   /**
    * Level Management: List & Update
    */
   async getLevels() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_LEVELS_LIST, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.LEVELS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   async updateLevel(id, data) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay(250);
       return { success: true, message: 'Level updated (Simulated Preview)', isDemoData: true };
     }
@@ -190,16 +193,16 @@ export const adminService = {
    * Achievement Management: List & Update
    */
   async getAchievements() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_ACHIEVEMENTS_LIST, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.ACHIEVEMENTS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   async updateAchievement(id, data) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay(250);
       return { success: true, message: 'Achievement updated (Simulated Preview)', isDemoData: true };
     }
@@ -243,49 +246,49 @@ export const adminService = {
    * Referral Management
    */
   async getReferrals() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_REFERRALS_LIST, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.REFERRALS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   /**
    * Activity & Audit Logs
    */
   async getActivities() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_ADMIN_DASHBOARD.recentActivities, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.ACTIVITIES);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   async getAuditLogs() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_AUDIT_LOGS, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.AUDIT_LOGS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   /**
    * Settings
    */
   async getSettings() {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay();
       return { data: PREVIEW_SETTINGS, isDemoData: true };
     }
     const response = await apiClient.get(API_ENDPOINTS.ADMIN.SETTINGS);
-    return { data: response.data, isDemoData: false };
+    return { data: response.data?.data || response.data, isDemoData: false };
   },
 
   async updateSettings(data) {
-    if (isPreviewModeActive()) {
+    if (isPreviewModeActive() && !hasRealAdminAuthToken()) {
       await simulateDelay(300);
       return { success: true, message: 'Settings saved (Simulated Preview)', isDemoData: true };
     }

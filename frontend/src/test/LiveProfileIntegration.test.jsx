@@ -290,6 +290,27 @@ describe('Step 7: Frontend Profile & Wallet Live Integration Tests', () => {
         isDemoData: false
       });
 
+      vi.spyOn(profileService, 'getReferrals').mockResolvedValue({
+        data: {
+          referralCode: 'VEL-REF888',
+          totalReferrals: 0,
+          successfulReferrals: 0,
+          pendingReferrals: 0,
+          referralRewardsVEs: 0,
+          referralXPEarned: 0,
+          currentMilestoneTarget: 5,
+          milestoneCurrentCount: 0,
+          milestonePercentage: 0,
+          referredUsers: []
+        },
+        isDemoData: false
+      });
+
+      vi.spyOn(profileService, 'getRecentActivity').mockResolvedValue({
+        data: [],
+        isDemoData: false
+      });
+
       render(
         <MemoryRouter>
           <ToastProvider>

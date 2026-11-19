@@ -15,6 +15,7 @@ import AccountSecurity from '../../components/profile/AccountSecurity';
 import ProfileEditModal from '../../components/profile/ProfileEditModal';
 import WithdrawalRequestModal from '../../components/profile/WithdrawalRequestModal';
 import DailyCheckInModal from '../../components/profile/DailyCheckInModal';
+import WatchAdsModal from '../../components/profile/WatchAdsModal';
 import ErrorState from '../../components/common/ErrorState';
 import Modal from '../../components/common/Modal';
 import Button from '../../components/common/Button';
@@ -39,6 +40,7 @@ const UserProfilePage = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCheckInModal, setShowCheckInModal] = useState(false);
+  const [showWatchAdsModal, setShowWatchAdsModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
 
   // Load all 8 module sections from profileService
@@ -143,6 +145,26 @@ const UserProfilePage = () => {
     }
   };
 
+  const handleAdRewardClaimed = async (claimData) => {
+    // Refresh live profile, reward balances, level progress, and achievements from backend
+    await loadProfileData();
+
+    // Append ad reward to live activity stream
+    if (claimData) {
+      const newAct = {
+        id: `act_${Date.now()}`,
+        type: 'AD_REWARD',
+        title: 'Sponsored Partner Ad View',
+        amount: `+${claimData.earnedReward || 15} VEs`,
+        assetType: 'ves',
+        timestamp: 'Just now',
+        status: 'Completed',
+        icon: 'PlaySquare'
+      };
+      setActivities((prev) => [newAct, ...(prev || [])]);
+    }
+  };
+
   if (error && !profileData) {
     return (
       <div style={{ padding: '40px 0' }}>
@@ -188,6 +210,7 @@ const UserProfilePage = () => {
       <QuickActions
         onRequestWithdrawal={() => setShowWithdrawModal(true)}
         onOpenDailyCheckIn={() => setShowCheckInModal(true)}
+        onOpenWatchAds={() => setShowWatchAdsModal(true)}
       />
 
       {/* 6. Referral Snapshot */}
@@ -230,6 +253,13 @@ const UserProfilePage = () => {
         isOpen={showCheckInModal}
         onClose={() => setShowCheckInModal(false)}
         onClaimSuccess={handleCheckInSuccess}
+      />
+
+      {/* Watch Ads Simulation Modal */}
+      <WatchAdsModal
+        isOpen={showWatchAdsModal}
+        onClose={() => setShowWatchAdsModal(false)}
+        onRewardClaimed={handleAdRewardClaimed}
       />
 
       {/* Account Settings / Preferences Modal */}

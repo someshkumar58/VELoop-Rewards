@@ -177,7 +177,7 @@ export const profileService = {
   },
 
   /**
-   * Fetch referrals snapshot (Sub-module: preserved for future steps)
+   * Fetch referrals snapshot from GET /api/profile/referrals
    */
   async getReferrals() {
     if (isPreviewModeActive() && !hasUserAuthToken()) {
@@ -187,16 +187,13 @@ export const profileService = {
         isDemoData: true
       };
     }
-    try {
-      const response = await apiClient.get(API_ENDPOINTS.PROFILE.REFERRALS);
-      return { data: response.data, isDemoData: false };
-    } catch {
-      return { data: PREVIEW_USER.referrals, isDemoData: true };
-    }
+    const response = await apiClient.get(API_ENDPOINTS.PROFILE.REFERRALS);
+    const data = response.data?.referrals || response.data?.data || response.data;
+    return { data, isDemoData: false };
   },
 
   /**
-   * Fetch recent user reward activity (Sub-module: preserved for future steps)
+   * Fetch recent user reward activity from GET /api/profile/activity
    */
   async getRecentActivity() {
     if (isPreviewModeActive() && !hasUserAuthToken()) {
@@ -206,12 +203,9 @@ export const profileService = {
         isDemoData: true
       };
     }
-    try {
-      const response = await apiClient.get(API_ENDPOINTS.PROFILE.ACTIVITY);
-      return { data: response.data, isDemoData: false };
-    } catch {
-      return { data: PREVIEW_USER.recentActivities, isDemoData: true };
-    }
+    const response = await apiClient.get(API_ENDPOINTS.PROFILE.ACTIVITY);
+    const data = response.data?.activities || response.data?.data || response.data;
+    return { data, isDemoData: false };
   },
 
   /**

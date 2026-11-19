@@ -114,6 +114,14 @@ const userSchema = new mongoose.Schema(
       uppercase: true
     },
 
+    // Referrer code of the user who invited this member
+    referredBy: {
+      type: String,
+      trim: true,
+      uppercase: true,
+      default: null
+    },
+
     // Email / KYC verification flag
     isVerified: {
       type: Boolean,
