@@ -20,6 +20,7 @@ import {
   Gift
 } from 'lucide-react';
 import EmptyState from '../common/EmptyState';
+import LevelBadge from '../common/LevelBadge';
 import styles from './LevelAchievements.module.css';
 
 // 5 Canonical Tiers Roadmap
@@ -175,7 +176,7 @@ const LevelAchievements = ({
         <div className={styles.heroTopRow}>
           <div className={styles.emblemAndInfo}>
             <div className={styles.emblemWrapper}>
-              <TierEmblemIcon size={32} className={styles.emblemIcon} />
+              <LevelBadge tier={currentLevel} size="md" showRibbon={false} glow={true} animated={true} />
             </div>
             <div className={styles.tierInfo}>
               <div className={styles.tierBadgePill}>
@@ -262,13 +263,13 @@ const LevelAchievements = ({
                 {isCurrent && <span className={styles.currentMarker}>Active</span>}
 
                 <div className={styles.tierStepIconWrap}>
-                  {isUnlocked ? (
-                    <CheckCircle2 size={22} />
-                  ) : isLocked ? (
-                    <Lock size={18} />
-                  ) : (
-                    <StepIcon size={22} />
-                  )}
+                  <LevelBadge
+                    tier={tier.level}
+                    size="xs"
+                    showRibbon={false}
+                    locked={isLocked}
+                    glow={isCurrent}
+                  />
                 </div>
 
                 <div className={styles.tierStepTitle}>{tier.stepLabel}</div>

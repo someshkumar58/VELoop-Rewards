@@ -23,6 +23,7 @@ import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import InputField from '../../components/common/InputField';
 import Skeleton from '../../components/common/Skeleton';
+import LevelBadge from '../../components/common/LevelBadge';
 
 // Tier styling metadata
 const TIER_META = {
@@ -365,20 +366,7 @@ const AdminLevelsPage = () => {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{
-                    width: '38px',
-                    height: '38px',
-                    borderRadius: '10px',
-                    backgroundColor: 'rgba(10, 12, 20, 0.8)',
-                    border: `1px solid ${meta.accent}`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: meta.accent,
-                    boxShadow: `0 0 10px ${meta.glow}`
-                  }}>
-                    <Icon size={20} />
-                  </div>
+                  <LevelBadge tier={lvl.level} size="xs" showRibbon={false} glow={true} />
                   <span style={{
                     backgroundColor: 'rgba(10, 12, 20, 0.7)',
                     border: `1px solid ${meta.accent}`,

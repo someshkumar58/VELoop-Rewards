@@ -94,15 +94,11 @@
 }
 
 .emblemWrapper {
-  width: 68px;
-  height: 68px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, #2A304C 0%, #1A1D2E 100%);
-  border: 2px solid var(--tier-accent, var(--accent-gold));
+  width: 84px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 20px var(--tier-glow, rgba(244, 199, 106, 0.3));
   position: relative;
   flex-shrink: 0;
 }
@@ -323,29 +319,12 @@
 }
 
 .tierStepIconWrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-}
-
-.tierStepUnlocked .tierStepIconWrap {
-  background: rgba(52, 211, 153, 0.15);
-  border-color: #34D399;
-  color: #34D399;
-}
-
-.tierStepCurrent .tierStepIconWrap {
-  background: rgba(244, 199, 106, 0.2);
-  border-color: var(--accent-gold);
-  color: var(--accent-gold);
-  box-shadow: 0 0 12px rgba(244, 199, 106, 0.4);
+  margin-bottom: 8px;
 }
 
 .currentMarker {
