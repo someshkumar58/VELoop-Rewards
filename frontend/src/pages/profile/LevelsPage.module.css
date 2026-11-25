@@ -892,6 +892,21 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+}
+
+.plannedPerkTag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent-purple);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  margin-left: 6px;
 }
 
 .badgeHeaderCell {
@@ -998,6 +1013,15 @@
   background: rgba(244, 199, 106, 0.15);
   border-color: var(--accent-gold);
   color: #FFFFFF;
+}
+
+.questActionBtnDisabled {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.02) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-muted) !important;
 }
 
 /* ==========================================================================

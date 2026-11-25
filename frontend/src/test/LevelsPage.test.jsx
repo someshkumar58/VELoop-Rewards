@@ -120,7 +120,7 @@ describe('LevelsPage & LevelBadge Redesign Suite', () => {
       expect(screen.getByText('Monthly Mystery Gem Crate')).toBeInTheDocument();
     });
 
-    it('renders Quest Hub with actionable earning methods', async () => {
+    it('renders Quest Hub with actionable earning methods and accurate VEs description', async () => {
       render(
         <MemoryRouter>
           <ToastProvider>
@@ -135,6 +135,71 @@ describe('LevelsPage & LevelBadge Redesign Suite', () => {
       expect(screen.getByRole('button', { name: /Check In Today/i })).toBeInTheDocument();
       expect(screen.getAllByRole('button', { name: /Watch Video/i }).length).toBeGreaterThan(0);
       expect(screen.getByRole('button', { name: /Copy Referral Link/i })).toBeInTheDocument();
+      expect(screen.getByText('+15 to +22.5 VEs / View')).toBeInTheDocument();
+      expect(screen.getByText(/Video rewards are credited as VEs to your wallet balance/i)).toBeInTheDocument();
+    });
+
+    it('renders planned perk and coming soon tags on unbacked platform perks in matrix', async () => {
+      render(
+        <MemoryRouter>
+          <ToastProvider>
+            <AuthProvider>
+              <LevelsPage />
+            </AuthProvider>
+          </ToastProvider>
+        </MemoryRouter>
+      );
+
+      expect(await screen.findByRole('heading', { name: /Full Tier Comparison Matrix/i })).toBeInTheDocument();
+      expect(screen.getAllByText('Planned Perk').length).toBeGreaterThanOrEqual(3);
+      expect(screen.getByText('Coming Soon')).toBeInTheDocument();
+    });
+
+    it('accurately renders 0 XP and Level 1 for new user without defaulting to Level 4 or 12,450 XP', async () => {
+      // Mock profileService to return a brand new level 1 user with 0 XP
+      const { profileService } = await import('../services/profileService');
+      vi.spyOn(profileService, 'getLevelProgress').mockResolvedValue({
+        data: {
+          currentLevel: 1,
+          levelName: 'Bronze Initiate',
+          totalXP: 0,
+          currentLevelXPRequirement: 0,
+          nextLevelXPRequirement: 2500,
+          remainingXP: 2500,
+          progressPercentage: 0,
+          rewardMultiplier: '1.00x'
+        },
+        isDemoData: false
+      });
+      vi.spyOn(profileService, 'getProfile').mockResolvedValue({
+        data: {
+          id: 'usr_new_01',
+          name: 'New Player',
+          referralCode: null
+        },
+        isDemoData: false
+      });
+
+      render(
+        <MemoryRouter>
+          <ToastProvider>
+            <AuthProvider>
+              <LevelsPage />
+            </AuthProvider>
+          </ToastProvider>
+        </MemoryRouter>
+      );
+
+      // Must display Level 1 Bronze Initiate, not Level 4 Gold Pioneer
+      expect(await screen.findByRole('heading', { level: 1, name: 'Bronze Initiate' })).toBeInTheDocument();
+      expect(screen.getAllByText(/0 XP|0 Total XP/).length).toBeGreaterThan(0);
+      expect(screen.queryByText(/12,450 XP/i)).not.toBeInTheDocument();
+
+      // Referral code unavailable state when code is null
+      const disabledBtn = await screen.findByRole('button', { name: /Referral Code Unavailable/i });
+      expect(disabledBtn).toBeInTheDocument();
+      expect(disabledBtn).toBeDisabled();
+      expect(screen.queryByText(/VEL-ALEX99/i)).not.toBeInTheDocument();
     });
 
     it('opens tier inspect modal when clicking View Details on a tier card', async () => {

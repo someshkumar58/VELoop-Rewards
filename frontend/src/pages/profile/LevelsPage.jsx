@@ -177,18 +177,44 @@ const LevelsPage = () => {
     fetchLevelData();
   }, [fetchLevelData, isDevPreview]);
 
-  // Defensive calculations for level status
-  const currentLevel = Number(levelProgress.currentLevel) || 4;
-  const levelName = levelProgress.levelName || 'Gold Pioneer';
-  const totalXP = Number(levelProgress.totalXP) || 12450;
-  const nextLevelXP = Number(levelProgress.nextLevelXPRequirement) || 15000;
-  const currentLevelMinXP = Number(levelProgress.currentLevelXPRequirement) || 10000;
-  const remainingXP = Math.max(0, Number(levelProgress.remainingXP) || (nextLevelXP - totalXP));
+  // Defensive calculations for level status with safe initial defaults (Level 1 Bronze Initiate, 0 XP)
+  // Ensure valid numeric 0 values and actual backend levels are not overridden by falsy checks.
+  const rawLevel = levelProgress?.currentLevel ?? user?.levelProgress?.currentLevel;
+  const parsedLevel = rawLevel !== undefined && rawLevel !== null && !isNaN(Number(rawLevel))
+    ? Math.max(1, Math.min(5, Math.floor(Number(rawLevel))))
+    : 1;
+  const currentLevel = parsedLevel;
+
+  const activeTierMeta = ROADMAP_TIERS.find((t) => t.level === currentLevel) ?? ROADMAP_TIERS[0];
+  const activeBadgeConfig = TIER_CONFIG[currentLevel] ?? TIER_CONFIG[1];
+
+  const levelName = levelProgress?.levelName ?? user?.levelProgress?.levelName ?? activeTierMeta.name;
+
+  const rawTotalXP = levelProgress?.totalXP ?? user?.levelProgress?.totalXP;
+  const totalXP = rawTotalXP !== undefined && rawTotalXP !== null && !isNaN(Number(rawTotalXP))
+    ? Math.max(0, Math.floor(Number(rawTotalXP)))
+    : 0;
+
+  const rawMinXP = levelProgress?.currentLevelXPRequirement ?? user?.levelProgress?.currentLevelXPRequirement;
+  const currentLevelMinXP = rawMinXP !== undefined && rawMinXP !== null && !isNaN(Number(rawMinXP))
+    ? Math.max(0, Math.floor(Number(rawMinXP)))
+    : activeTierMeta.minXP;
+
+  const rawNextXP = levelProgress?.nextLevelXPRequirement ?? user?.levelProgress?.nextLevelXPRequirement;
+  const nextLevelXP = rawNextXP !== undefined && rawNextXP !== null && !isNaN(Number(rawNextXP))
+    ? Math.max(0, Math.floor(Number(rawNextXP)))
+    : (activeTierMeta.maxXP === Infinity ? activeTierMeta.minXP : activeTierMeta.maxXP + 1);
+
+  const rawRemainingXP = levelProgress?.remainingXP ?? user?.levelProgress?.remainingXP;
+  const remainingXP = rawRemainingXP !== undefined && rawRemainingXP !== null && !isNaN(Number(rawRemainingXP))
+    ? Math.max(0, Math.floor(Number(rawRemainingXP)))
+    : Math.max(0, nextLevelXP - totalXP);
 
   // Progress percentage within tier
-  let progressPct = 83;
-  if (levelProgress.progressPercentage !== undefined && !isNaN(levelProgress.progressPercentage)) {
-    progressPct = Math.min(100, Math.max(0, Number(levelProgress.progressPercentage)));
+  let progressPct = 0;
+  const rawProgressPct = levelProgress?.progressPercentage ?? user?.levelProgress?.progressPercentage;
+  if (rawProgressPct !== undefined && rawProgressPct !== null && !isNaN(Number(rawProgressPct))) {
+    progressPct = Math.min(100, Math.max(0, Math.round(Number(rawProgressPct))));
   } else if (currentLevel >= 5) {
     progressPct = 100;
   } else if (nextLevelXP > currentLevelMinXP) {
@@ -197,16 +223,22 @@ const LevelsPage = () => {
     progressPct = Math.min(100, Math.max(0, Math.round((gainedInTier / tierSpan) * 100)));
   }
 
-  const activeTierMeta = ROADMAP_TIERS.find((t) => t.level === currentLevel) || ROADMAP_TIERS[3];
-  const activeBadgeConfig = TIER_CONFIG[currentLevel] || TIER_CONFIG[4];
+  // Derive authentic user referral code without any hardcoded mock fallback
+  const rawReferral = (profileData && ('referralCode' in profileData || (profileData.user && 'referralCode' in profileData.user)))
+    ? (profileData.referralCode ?? profileData.user?.referralCode ?? null)
+    : (user?.referralCode ?? user?.referrals?.referralCode ?? null);
+  const referralCode = typeof rawReferral === 'string' && rawReferral.trim().length > 0 ? rawReferral.trim() : null;
 
   // Copy referral code for XP quest
   const handleCopyReferral = () => {
-    const code = profileData?.referralCode || user?.referrals?.referralCode || 'VEL-ALEX99';
-    const link = `${window.location.origin}/register?ref=${code}`;
+    if (!referralCode) {
+      addToast('Referral code is currently unavailable for this account.', 'error');
+      return;
+    }
+    const link = `${window.location.origin}/register?ref=${referralCode}`;
     if (navigator.clipboard) {
       navigator.clipboard.writeText(link);
-      addToast(`Referral link copied! Share to earn +200 XP per friend.`, 'success');
+      addToast('Referral link copied! Share to earn +200 XP per friend.', 'success');
     }
   };
 
@@ -348,7 +380,7 @@ const LevelsPage = () => {
               onClick={() => setShowWatchAdsModal(true)}
             >
               <Tv size={16} />
-              <span>Watch Video (+XP)</span>
+              <span>Watch Video (+VEs)</span>
             </button>
             <button
               type="button"
@@ -652,6 +684,7 @@ const LevelsPage = () => {
                   <td className={styles.featureTitleCell}>
                     <Clock size={16} style={{ color: 'var(--accent-blue)' }} />
                     <span>Withdrawal Processing Speed</span>
+                    <span className={styles.plannedPerkTag}>Planned Perk</span>
                   </td>
                   {ROADMAP_TIERS.map((t) => (
                     <td key={t.level} className={currentLevel === t.level ? styles.activeColumnTd : ''} style={{ textAlign: 'center' }}>
@@ -663,6 +696,7 @@ const LevelsPage = () => {
                   <td className={styles.featureTitleCell}>
                     <Gem size={16} style={{ color: 'var(--accent-purple)' }} />
                     <span>Monthly Mystery Gem Crate</span>
+                    <span className={styles.plannedPerkTag}>Coming Soon</span>
                   </td>
                   {ROADMAP_TIERS.map((t) => (
                     <td key={t.level} className={currentLevel === t.level ? styles.activeColumnTd : ''} style={{ textAlign: 'center' }}>
@@ -674,6 +708,7 @@ const LevelsPage = () => {
                   <td className={styles.featureTitleCell}>
                     <Shield size={16} style={{ color: '#34D399' }} />
                     <span>Internal Token Swap Fee</span>
+                    <span className={styles.plannedPerkTag}>Planned Perk</span>
                   </td>
                   {ROADMAP_TIERS.map((t) => (
                     <td key={t.level} className={currentLevel === t.level ? styles.activeColumnTd : ''} style={{ textAlign: 'center' }}>
@@ -685,6 +720,7 @@ const LevelsPage = () => {
                   <td className={styles.featureTitleCell}>
                     <Crown size={16} style={{ color: '#F4C76A' }} />
                     <span>Exclusive VIP Privileges</span>
+                    <span className={styles.plannedPerkTag}>Planned Perk</span>
                   </td>
                   {ROADMAP_TIERS.map((t) => (
                     <td key={t.level} className={currentLevel === t.level ? styles.activeColumnTd : ''} style={{ textAlign: 'center', fontSize: '0.8rem' }}>
@@ -745,11 +781,11 @@ const LevelsPage = () => {
               </div>
               <div className={styles.questInfo}>
                 <h3 className={styles.questTitle}>Watch Video Ads</h3>
-                <span className={styles.questXPReward}>+15 to +25 XP / View</span>
+                <span className={styles.questXPReward}>+15 to +22.5 VEs / View</span>
               </div>
             </div>
             <p className={styles.questDesc}>
-              Stream partner sponsored videos with HMAC validation. Earn VEs and XP scaled by your 1.25x multiplier.
+              Stream partner sponsored videos with server-side HMAC validation. Earn 15.00 to 22.50 VEs scaled by your tier multiplier. Note: Video rewards are credited as VEs to your wallet balance.
             </p>
             <button
               type="button"
@@ -773,16 +809,36 @@ const LevelsPage = () => {
               </div>
             </div>
             <p className={styles.questDesc}>
-              Share your referral code. When your invited friend registers, both of you instantly gain bonus XP.
+              {referralCode ? (
+                <>
+                  Share your referral link ({referralCode}). When your invited friend registers, both of you instantly gain bonus XP.
+                </>
+              ) : (
+                <>
+                  Referral code is currently unavailable. Complete profile verification or contact support to generate a personal link.
+                </>
+              )}
             </p>
-            <button
-              type="button"
-              className={styles.questActionBtn}
-              onClick={handleCopyReferral}
-            >
-              <span>Copy Referral Link</span>
-              <ArrowRight size={14} />
-            </button>
+            {referralCode ? (
+              <button
+                type="button"
+                className={styles.questActionBtn}
+                onClick={handleCopyReferral}
+              >
+                <span>Copy Referral Link</span>
+                <ArrowRight size={14} />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={`${styles.questActionBtn} ${styles.questActionBtnDisabled}`}
+                onClick={handleCopyReferral}
+                disabled
+                aria-disabled="true"
+              >
+                <span>Referral Code Unavailable</span>
+              </button>
+            )}
           </div>
 
           {/* Quest 4: Platform Achievements */}
