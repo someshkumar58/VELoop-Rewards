@@ -9,6 +9,11 @@ export const isPreviewModeActive = () => {
     return false;
   }
 
+  // In production builds, development preview mode is strictly disabled
+  if (import.meta.env.PROD || import.meta.env.MODE === 'production') {
+    return false;
+  }
+
   const saved = localStorage.getItem('veloop_dev_preview');
   if (saved !== null) {
     return saved === 'true';

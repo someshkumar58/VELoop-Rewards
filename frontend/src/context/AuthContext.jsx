@@ -6,14 +6,19 @@ import { PREVIEW_USER } from '../constants/previewData';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  // Read initial Dev Preview setting: default to true whenever no auth token is present
+  const isProduction = import.meta.env.PROD || import.meta.env.MODE === 'production';
+
+  // Read initial Dev Preview setting: default to true whenever no auth token is present in development
   const [isDevPreview, setIsDevPreview] = useState(() => {
+    if (isProduction) {
+      return false;
+    }
     const token = typeof window !== 'undefined' ? localStorage.getItem('veloop_auth_token') : null;
     const saved = typeof window !== 'undefined' ? localStorage.getItem('veloop_dev_preview') : null;
     if (saved !== null) {
       return saved === 'true';
     }
-    // If no real user token is present, initialize Dev Preview to true so visitor never sees 401 error
+    // In dev: If no real user token is present, initialize Dev Preview to true so visitor never sees 401 error
     if (!token) {
       return true;
     }
@@ -27,11 +32,11 @@ export const AuthProvider = ({ children }) => {
       try {
         return JSON.parse(saved);
       } catch {
-        return PREVIEW_USER;
+        return isProduction ? null : PREVIEW_USER;
       }
     }
-    // When unauthenticated, initialize with PREVIEW_USER so profile renders seamlessly
-    return PREVIEW_USER;
+    // When unauthenticated, initialize with PREVIEW_USER in dev so profile renders seamlessly
+    return isProduction ? null : PREVIEW_USER;
   });
 
   const [admin, setAdmin] = useState(() => {

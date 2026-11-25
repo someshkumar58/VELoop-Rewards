@@ -6,6 +6,11 @@ import Button from './Button';
 import styles from './DevPreviewBanner.module.css';
 
 const DevPreviewBanner = () => {
+  const isProduction = import.meta.env.PROD || import.meta.env.MODE === 'production';
+  if (isProduction) {
+    return null;
+  }
+
   const { isDevPreview, toggleDevPreview } = useAuth();
   const [showModal, setShowModal] = useState(false);
 

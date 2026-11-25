@@ -249,5 +249,76 @@ describe('LevelsPage & LevelBadge Redesign Suite', () => {
       expect(writeTextMock).toHaveBeenCalled();
       expect(await screen.findByText(/Referral link copied!/i)).toBeInTheDocument();
     });
+
+    it('ensures progression pathway subtitle does not promise instant payouts', async () => {
+      render(
+        <MemoryRouter>
+          <ToastProvider>
+            <AuthProvider>
+              <LevelsPage />
+            </AuthProvider>
+          </ToastProvider>
+        </MemoryRouter>
+      );
+
+      expect(await screen.findByRole('heading', { name: /Progression Pathway/i })).toBeInTheDocument();
+      // Must not promise instant payouts in the pathway subtitle
+      expect(screen.queryByText(/instant payouts/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/Your journey from initiate to legend/i)).toBeInTheDocument();
+    });
+
+    it('fetches and renders live backend data when authenticated with valid JWT', async () => {
+      localStorage.setItem('veloop_auth_token', 'mock-live-jwt-token');
+      localStorage.setItem('veloop_dev_preview', 'false');
+
+      const { profileService } = await import('../services/profileService');
+      const getLvlSpy = vi.spyOn(profileService, 'getLevelProgress').mockResolvedValue({
+        data: {
+          currentLevel: 3,
+          levelName: 'Titanium Voyager',
+          totalXP: 7200,
+          currentLevelMinXP: 6000,
+          nextLevelXP: 10000,
+          remainingXP: 2800,
+          progressPercentage: 30,
+          rewardMultiplier: '1.15x'
+        },
+        isDemoData: false
+      });
+      const getProfSpy = vi.spyOn(profileService, 'getProfile').mockResolvedValue({
+        data: {
+          id: 'usr_real_99',
+          name: 'Sarah Connor',
+          fullName: 'Sarah Connor',
+          referralCode: 'VEL-SARAH99'
+        },
+        isDemoData: false
+      });
+
+      render(
+        <MemoryRouter>
+          <ToastProvider>
+            <AuthProvider>
+              <LevelsPage />
+            </AuthProvider>
+          </ToastProvider>
+        </MemoryRouter>
+      );
+
+      // Verify that profile and level service were queried
+      await waitFor(() => {
+        expect(getLvlSpy).toHaveBeenCalled();
+        expect(getProfSpy).toHaveBeenCalled();
+      });
+
+      // Verify live user data rendered in place of demo data
+      expect(await screen.findByRole('heading', { level: 1, name: 'Titanium Voyager' })).toBeInTheDocument();
+      expect(screen.getByText(/1.15x Boost/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/7,200 XP|7,200 Total XP/).length).toBeGreaterThan(0);
+      expect(screen.getByText(/VEL-SARAH99/i)).toBeInTheDocument();
+      expect(screen.getByText(/Tier 3: Titanium Voyager/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Tier 4: Gold Pioneer/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/12,450 Total XP/i)).not.toBeInTheDocument();
+    });
   });
 });

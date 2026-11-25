@@ -10,7 +10,6 @@ import {
   Lock,
   ArrowLeft,
   ArrowRight,
-  Gift,
   Tv,
   Share2,
   Flame,
@@ -19,12 +18,8 @@ import {
   Clock,
   TrendingUp,
   ChevronRight,
-  Info,
   Check,
-  Star,
-  Shield,
-  Compass,
-  Rocket
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
@@ -37,7 +32,7 @@ import Button from '../../components/common/Button';
 import Skeleton from '../../components/common/Skeleton';
 import styles from './LevelsPage.module.css';
 
-// 5 Canonical Tiers Roadmap Specification
+// 5 Canonical Tiers Roadmap Specification matching backend levelTiers.js
 const ROADMAP_TIERS = [
   {
     level: 1,
@@ -50,13 +45,13 @@ const ROADMAP_TIERS = [
     checkInBonus: 'Standard (Base XP)',
     withdrawalSpeed: 'Standard Review (24 – 48h)',
     gemCrate: 'None',
-    swapFee: '2.0% Processing Fee',
-    vipPrivilege: 'Standard Community Discord Access',
+    swapFee: 'Standard Processing Fee',
+    vipPrivilege: 'Community Discord Access',
     perksList: [
-      'Standard daily check-in rewards & baseline VE earning rates',
+      'Standard daily check-in rewards & base VE earning rates',
       'Earn 15.00 VEs per verified sponsored ad watch',
-      'Basic access to platform token conversion options',
-      'Standard community membership in Discord'
+      'Standard token withdrawal requests (manual review)',
+      'Community membership in Discord'
     ]
   },
   {
@@ -68,15 +63,15 @@ const ROADMAP_TIERS = [
     multiplier: '1.10x',
     adPayout: '16.50 VEs / ad',
     checkInBonus: '+10% Bonus XP & VEs',
-    withdrawalSpeed: 'Expedited Queue (24h)',
-    gemCrate: 'Common Monthly Crate',
-    swapFee: '1.5% Reduced Fee',
-    vipPrivilege: 'Silver Explorer Role & Badge',
+    withdrawalSpeed: 'Expedited Review (Planned Perk)',
+    gemCrate: 'Common Drop (Coming Soon)',
+    swapFee: 'Reduced Fee (Planned Perk)',
+    vipPrivilege: 'Silver Role & Badge',
     perksList: [
-      '+10% bonus multiplier on all ad watches and task rewards',
+      '+10% bonus multiplier on all ad watches & streak rewards',
       'Earn 16.50 VEs per sponsored video impression',
-      'Expedited review queue for KYC & verification',
-      'Monthly Common Gemstone Drop eligibility'
+      'Expedited withdrawal review queue (Planned Perk)',
+      'Monthly Common Gemstone Drop (Coming Soon)'
     ]
   },
   {
@@ -88,15 +83,15 @@ const ROADMAP_TIERS = [
     multiplier: '1.15x',
     adPayout: '17.25 VEs / ad',
     checkInBonus: '+15% Bonus XP & VEs',
-    withdrawalSpeed: 'Priority Queue (12h)',
-    gemCrate: 'Rare Gem Crate',
-    swapFee: '1.0% Low Fee',
-    vipPrivilege: 'Voyager Community Channels',
+    withdrawalSpeed: 'Priority Review (Planned Perk)',
+    gemCrate: 'Rare Crate (Coming Soon)',
+    swapFee: 'Low Fee (Planned Perk)',
+    vipPrivilege: 'Voyager Channels (Coming Soon)',
     perksList: [
-      '+15% bonus multiplier across all ecosystem claims',
+      '+15% bonus multiplier across all claims & quests',
       'Earn 17.25 VEs per verified video view',
-      'Free monthly Rare Gem Crate with guaranteed drop',
-      '12-hour prioritized withdrawal processing window'
+      'High-priority withdrawal review (Planned Perk)',
+      'Monthly Rare Gem Crate drop (Coming Soon)'
     ]
   },
   {
@@ -108,16 +103,16 @@ const ROADMAP_TIERS = [
     multiplier: '1.25x',
     adPayout: '18.75 VEs / ad',
     checkInBonus: '+25% Bonus XP & VEs',
-    withdrawalSpeed: 'Fast-Track Payout (6h)',
-    gemCrate: 'Epic Gold Crate',
-    swapFee: '0.0% Zero-Fee Swaps',
-    vipPrivilege: 'Gold VIP Lounge & Early Feature Access',
+    withdrawalSpeed: 'Fast-Track Processing (Planned Perk)',
+    gemCrate: 'Epic Gold Crate (Coming Soon)',
+    swapFee: 'Zero-Fee Swaps (Planned Perk)',
+    vipPrivilege: 'VIP Lounge Access (Coming Soon)',
     perksList: [
       '+25% reward multipliers across all claims, ads & checks',
       'Earn 18.75 VEs per sponsored video impression',
-      'Zero-fee cryptocurrency & token redemption swaps',
-      '6-hour fast-track withdrawal processing queue',
-      'Exclusive Gold Pioneer VIP lounge and direct support'
+      'Fast-track withdrawal processing (Planned Perk)',
+      'Zero-fee cryptocurrency & token redemption swaps (Planned Perk)',
+      'Gold VIP lounge & direct support (Coming Soon)'
     ]
   },
   {
@@ -129,16 +124,16 @@ const ROADMAP_TIERS = [
     multiplier: '1.50x',
     adPayout: '22.50 VEs / ad',
     checkInBonus: '+50% Max Streak Boost',
-    withdrawalSpeed: 'Instant Settlement Routing',
-    gemCrate: 'Legendary Diamond Crate',
-    swapFee: 'Zero-Fee + 1.0% Token Cashback',
-    vipPrivilege: 'VIP Telegram, Personal Rep & Swag Kit',
+    withdrawalSpeed: 'Instant Settlement (Planned Perk)',
+    gemCrate: 'Diamond Crate (Coming Soon)',
+    swapFee: 'Zero-Fee + Cashback (Planned Perk)',
+    vipPrivilege: 'VIP Concierge & Swag (Planned Perk)',
     perksList: [
       '+50% maximum platform multiplier on all earning engines',
       'Earn 22.50 VEs per sponsored video watch',
-      'Instant settlement routing on all token redemptions',
-      'Zero-fee swaps plus +1% cashback bonus on payouts',
-      'VIP Telegram concierge, direct management rep & physical swag kit'
+      'Instant settlement routing on all token redemptions (Planned Perk)',
+      'Zero-fee swaps plus +1% token cashback (Planned Perk)',
+      'VIP Telegram concierge & physical swag kit (Planned Perk)'
     ]
   }
 ];
@@ -242,11 +237,6 @@ const LevelsPage = () => {
     }
   };
 
-  const scrollToRoadmap = () => {
-    const el = document.getElementById('tiers-grid-section');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   const scrollToMatrix = () => {
     const el = document.getElementById('perks-matrix-section');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -272,7 +262,7 @@ const LevelsPage = () => {
           </div>
           <div className={`${styles.statPill} ${styles.statPillCyan}`}>
             <Zap size={14} />
-            <span>{levelProgress.rewardMultiplier || activeTierMeta.multiplier} Boost</span>
+            <span>{levelProgress?.rewardMultiplier ?? activeTierMeta.multiplier} Boost</span>
           </div>
           <div className={styles.statPill}>
             <Sparkles size={14} style={{ color: 'var(--accent-purple)' }} />
@@ -314,7 +304,7 @@ const LevelsPage = () => {
               </div>
               <div className={styles.multiplierPill}>
                 <Zap size={13} />
-                <span>{levelProgress.rewardMultiplier || activeTierMeta.multiplier} Earning Multiplier</span>
+                <span>{levelProgress?.rewardMultiplier ?? activeTierMeta.multiplier} Earning Multiplier</span>
               </div>
             </div>
 
@@ -340,7 +330,13 @@ const LevelsPage = () => {
                 </span>
               </div>
 
-              <div className={styles.progressBarTrack} role="progressbar" aria-valuenow={progressPct} aria-valuemin={0} aria-valuemax={100}>
+              <div
+                className={styles.progressBarTrack}
+                role="progressbar"
+                aria-valuenow={progressPct}
+                aria-valuemin={0}
+                aria-valuemax={100}
+              >
                 <div
                   className={styles.progressBarFill}
                   style={{ width: `${progressPct}%` }}
@@ -350,7 +346,7 @@ const LevelsPage = () => {
               <div className={styles.progressFooterRow}>
                 <span className={styles.remainingText}>
                   {currentLevel >= 5 ? (
-                    '🎉 Diamond Legend Status achieved! VIP perks and instant settlement are active.'
+                    '🎉 Diamond Legend Status achieved! Maximum 1.50x multiplier and mythic tier unlocked.'
                   ) : (
                     <>
                       Remaining to Level {currentLevel + 1} ({ROADMAP_TIERS[currentLevel]?.name}):{' '}
@@ -403,7 +399,7 @@ const LevelsPage = () => {
               <span>Progression Pathway</span>
             </h2>
             <p className={styles.blockSubtitle}>
-              Your journey from initiate to legend. Ascend tiers to unlock higher multipliers and instant payouts.
+              Your journey from initiate to legend. Ascend tiers to unlock higher multipliers and exclusive privileges.
             </p>
           </div>
           <span style={{ fontSize: '0.84rem', color: 'var(--text-secondary)' }}>
@@ -489,7 +485,7 @@ const LevelsPage = () => {
               <span>Tier Rewards & Privileges</span>
             </h2>
             <p className={styles.blockSubtitle}>
-              Detailed breakdown of earning bonuses, perks, and withdrawal speeds at every level tier.
+              Detailed breakdown of earning multipliers, task rewards, and tier privileges at every level tier.
             </p>
           </div>
         </div>
